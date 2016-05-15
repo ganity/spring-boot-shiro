@@ -20,6 +20,7 @@ import org.apache.shiro.session.mgt.eis.SessionIdGenerator;
 import org.apache.shiro.session.mgt.quartz.QuartzSessionValidationScheduler;
 import org.apache.shiro.spring.web.ShiroFilterFactoryBean;
 import org.apache.shiro.subject.PrincipalCollection;
+import org.apache.shiro.web.filter.authz.AuthorizationFilter;
 import org.apache.shiro.web.mgt.CookieRememberMeManager;
 import org.apache.shiro.web.servlet.Cookie;
 import org.apache.shiro.web.servlet.SimpleCookie;
@@ -119,9 +120,9 @@ public class ShiroAutoConfiguration {
         return realm;
     }
 
-    @Bean(name = "cacheManager")
+    @Bean(name = "shiroCacheManager")
     @ConditionalOnClass(name = {"org.apache.shiro.cache.ehcache.EhCacheManager"})
-    @ConditionalOnMissingBean(name = "cacheManager")
+    @ConditionalOnMissingBean(name = "shiroCacheManager")
     public CacheManager ehcacheManager() {
         EhCacheManager ehCacheManager = new EhCacheManager();
         ShiroProperties.Ehcache ehcache = properties.getEhcache();
@@ -204,7 +205,7 @@ public class ShiroAutoConfiguration {
     }
 
     @Bean
-    @DependsOn(value = {"cacheManager", "sessionDAO"})
+    @DependsOn(value = {"shiroCacheManager", "sessionDAO"})
     public WebSessionManager sessionManager(CacheManager cacheManager, SessionDAO sessionDAO) {
         DefaultWebSessionManager sessionManager = new DefaultWebSessionManager();
         sessionManager.setCacheManager(cacheManager);
@@ -217,7 +218,7 @@ public class ShiroAutoConfiguration {
 
     @Bean(name = "credentialsMatcher")
     @ConditionalOnMissingBean
-    @DependsOn("cacheManager")
+    @DependsOn("shiroCacheManager")
     public CredentialsMatcher credentialsMatcher(CacheManager cacheManager) {
         RetryLimitHashedCredentialsMatcher credentialsMatcher = new RetryLimitHashedCredentialsMatcher(cacheManager);
         credentialsMatcher.setHashAlgorithmName(properties.getHashAlgorithmName());
@@ -245,7 +246,13 @@ public class ShiroAutoConfiguration {
         shiroFilter.setUnauthorizedUrl(properties.getUnauthorizedUrl());
 
         Map<String, Filter> filterMap = new LinkedHashMap<String, Filter>();
-        filterMap.put("authc", formSignInFilter());
+        Class<? extends AuthorizationFilter> customAuthcFilterClass = properties.getCustomAuthcFilterClass();
+        if (null != customAuthcFilterClass ) {
+        	AuthorizationFilter filter = BeanUtils.instantiate(customAuthcFilterClass);
+        	filterMap.put("authc", filter);
+        } else {
+        	filterMap.put("authc", formSignInFilter());
+        }
 
         shiroFilter.setFilters(filterMap);
         shiroFilter.setFilterChainDefinitionMap(properties.getFilterChainDefinitions());
