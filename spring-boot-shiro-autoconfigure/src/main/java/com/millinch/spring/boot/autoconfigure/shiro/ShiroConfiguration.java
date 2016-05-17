@@ -44,15 +44,15 @@ public class ShiroConfiguration {
     /**
      * (基于内存的)用户授权信息Cache
      */
-    @Bean(name = "cacheManager")
-    @ConditionalOnMissingBean(name = "cacheManager")
+    @Bean(name = "shiroCacheManager")
+    @ConditionalOnMissingBean(name = "shiroCacheManager")
     @ConditionalOnMissingClass(value = {"org.apache.shiro.cache.ehcache.EhCacheManager"})
-    public CacheManager cacheManager() {
+    public CacheManager shiroCacheManager() {
         return new MemoryConstrainedCacheManager();
     }
 
     @Bean(name = "securityManager")
-    @DependsOn(value = {"cacheManager", "rememberMeManager", "mainRealm"})
+    @DependsOn(value = {"shiroCacheManager", "rememberMeManager", "mainRealm"})
     public DefaultSecurityManager securityManager(Realm realm, RememberMeManager rememberMeManager,
                                                   CacheManager cacheManager, SessionManager sessionManager) {
         DefaultSecurityManager sm = new DefaultWebSecurityManager();
