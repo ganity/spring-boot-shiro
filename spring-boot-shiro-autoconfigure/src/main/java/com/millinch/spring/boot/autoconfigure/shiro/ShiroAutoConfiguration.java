@@ -185,6 +185,8 @@ public class ShiroAutoConfiguration {
     @ConditionalOnMissingBean(SessionValidationScheduler.class)
     public SessionValidationScheduler quartzSessionValidationScheduler(DefaultWebSessionManager sessionManager) {
         QuartzSessionValidationScheduler quartzSessionValidationScheduler = new QuartzSessionValidationScheduler(sessionManager);
+        quartzSessionValidationScheduler.setSessionValidationInterval(shiroSessionProperties.getValidationInterval());
+        quartzSessionValidationScheduler.enableSessionValidation();
         sessionManager.setDeleteInvalidSessions(shiroSessionProperties.isDeleteInvalidSessions());
         sessionManager.setSessionValidationInterval(shiroSessionProperties.getValidationInterval());
         sessionManager.setSessionValidationSchedulerEnabled(shiroSessionProperties.isValidationSchedulerEnabled());
