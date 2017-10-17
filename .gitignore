@@ -11,6 +11,8 @@ rebel.xml
 .project
 .settings
 .DS_Store
+.cache-main
+.cache-tests
 
 classes/
 target

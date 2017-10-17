@@ -1,6 +1,7 @@
 package com.millinch.spring.boot.autoconfigure.shiro;
 
 import org.apache.shiro.realm.Realm;
+import org.apache.shiro.web.filter.authz.AuthorizationFilter;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
 import java.util.Map;
@@ -12,11 +13,11 @@ import java.util.Map;
  */
 @ConfigurationProperties(prefix = "shiro")
 public class ShiroProperties {
+    private final Ehcache ehcache = new Ehcache();
     /**
      * Custom Realm
      */
     private Class<? extends Realm> realmClass = null;
-
     /**
      * URL of login
      */
@@ -29,24 +30,21 @@ public class ShiroProperties {
      * URL of unauthorized
      */
     private String unauthorizedUrl = "/unauthorized";
-
     private String hashAlgorithmName = "MD5";
-
     private int hashIterations = 1;
-
     /**
      * 密码重试次数上限
      */
     private int retryMax = 5;
-
     private boolean storedCredentialsHexEncoded = true;
-
     /**
      * Filter chain
      */
     private Map<String, String> filterChainDefinitions;
-
-    private final Ehcache ehcache = new Ehcache();
+    /**
+     * Custom Realm
+     */
+    private Class<? extends AuthorizationFilter> customAuthcFilterClass = null;
 
     public Class<? extends Realm> getRealmClass() {
         return realmClass;
@@ -122,6 +120,14 @@ public class ShiroProperties {
 
     public Ehcache getEhcache() {
         return ehcache;
+    }
+
+    public Class<? extends AuthorizationFilter> getCustomAuthcFilterClass() {
+        return customAuthcFilterClass;
+    }
+
+    public void setCustomAuthcFilterClass(Class<? extends AuthorizationFilter> customAuthcFilterClass) {
+        this.customAuthcFilterClass = customAuthcFilterClass;
     }
 
     public static class Ehcache {

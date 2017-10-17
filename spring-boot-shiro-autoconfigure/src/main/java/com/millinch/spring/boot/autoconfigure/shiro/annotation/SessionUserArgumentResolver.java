@@ -10,6 +10,7 @@ import org.springframework.web.method.support.ModelAndViewContainer;
 
 /**
  * {@link SessionUser}注解的解析
+ *
  * @author 张劲航
  */
 public class SessionUserArgumentResolver implements HandlerMethodArgumentResolver {
@@ -22,7 +23,7 @@ public class SessionUserArgumentResolver implements HandlerMethodArgumentResolve
     @Override
     public Object resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer, NativeWebRequest webRequest, WebDataBinderFactory binderFactory) throws Exception {
         Subject subject = SecurityUtils.getSubject();
-        if(supportsParameter(parameter) && subject.isAuthenticated()){
+        if (supportsParameter(parameter) && subject.isAuthenticated()) {
             return subject.getPrincipal();
         }
         return null;

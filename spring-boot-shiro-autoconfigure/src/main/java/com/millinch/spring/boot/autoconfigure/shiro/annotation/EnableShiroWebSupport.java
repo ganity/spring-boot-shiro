@@ -14,19 +14,20 @@ import java.lang.annotation.*;
  * {@link com.millinch.spring.boot.autoconfigure.shiro.annotation.SessionUser}.
  * </li>
  * </ul>
+ *
  * @author John Zhang
  */
 @Retention(RetentionPolicy.RUNTIME)
-@Target({ ElementType.TYPE, ElementType.ANNOTATION_TYPE })
+@Target({ElementType.TYPE, ElementType.ANNOTATION_TYPE})
 @Inherited
-@Import({ EnableShiroWebSupport.ShiroWebMvcConfigurerAdapterImportSelector.class })
+@Import({EnableShiroWebSupport.ShiroWebMvcConfigurerAdapterImportSelector.class})
 public @interface EnableShiroWebSupport {
 
     static class ShiroWebMvcConfigurerAdapterImportSelector implements ImportSelector {
 
         @Override
         public String[] selectImports(AnnotationMetadata importingClassMetadata) {
-            return new String[] { ShiroWebMvcConfigurerAdapter.class.getName() };
+            return new String[]{ShiroWebMvcConfigurerAdapter.class.getName()};
         }
 
     }

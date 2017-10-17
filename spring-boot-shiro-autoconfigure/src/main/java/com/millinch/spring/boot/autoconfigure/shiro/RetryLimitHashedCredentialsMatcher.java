@@ -25,21 +25,21 @@ public class RetryLimitHashedCredentialsMatcher extends HashedCredentialsMatcher
 
     @Override
     public boolean doCredentialsMatch(AuthenticationToken token, AuthenticationInfo info) throws ExcessiveAttemptsException {
-        String username = (String)token.getPrincipal();
+        String username = (String) token.getPrincipal();
         AtomicInteger retryCount = passwordRetryCache.get(username);
 
-        if(retryCount == null) {
+        if (retryCount == null) {
             retryCount = new AtomicInteger(0);
             passwordRetryCache.put(username, retryCount);
         }
-        if(retryCount.incrementAndGet() > retryMax) {
+        if (retryCount.incrementAndGet() > retryMax) {
             throw new ExcessiveAttemptsException("您已连续错误达" + retryMax + "次！请10分钟后再试");
         }
 
         boolean matches = super.doCredentialsMatch(token, info);
-        if(matches) {
+        if (matches) {
             passwordRetryCache.remove(username);
-        }else {
+        } else {
             throw new IncorrectCredentialsException("密码错误，已错误" + retryCount.get() + "次，最多错误" + retryMax + "次");
         }
         return true;
