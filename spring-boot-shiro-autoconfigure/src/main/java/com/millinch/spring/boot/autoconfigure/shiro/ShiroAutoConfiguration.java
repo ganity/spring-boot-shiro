@@ -213,6 +213,21 @@ public class ShiroAutoConfiguration {
         sessionManager.setCacheManager(cacheManager);
         sessionManager.setGlobalSessionTimeout(shiroSessionProperties.getGlobalSessionTimeout());
 
+        SimpleCookie simpleCookie = new SimpleCookie();
+        simpleCookie.setName(shiroCookieProperties.getSessionIdName());
+        simpleCookie.setMaxAge(shiroCookieProperties.getMaxAge());
+        simpleCookie.setValue(shiroCookieProperties.getValue());
+        simpleCookie.setVersion(shiroCookieProperties.getVersion());
+        simpleCookie.setHttpOnly(shiroCookieProperties.isHttpOnly());
+        simpleCookie.setSecure(shiroCookieProperties.isSecure());
+        if (null != shiroCookieProperties.getPath()) {
+            simpleCookie.setPath(shiroCookieProperties.getPath());
+        }
+        if (null != shiroCookieProperties.getDomain()) {
+            simpleCookie.setDomain(shiroCookieProperties.getDomain());
+        }
+        sessionManager.setSessionIdCookie(simpleCookie);
+
         sessionManager.setSessionDAO(sessionDAO);
         sessionManager.setSessionListeners(listeners);
         return sessionManager;

@@ -11,6 +11,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 public class ShiroCookieProperties {
 
     private String name = "rememberMe";
+    private String sessionIdName = "JSESSIONID";
 
     private String value;
 
@@ -27,6 +28,10 @@ public class ShiroCookieProperties {
     private String encryptionCipherKey;
 
     private String decryptionCipherKey;
+
+    private String domain;
+
+    private String path;
 
     public String getName() {
         return name;
@@ -98,5 +103,29 @@ public class ShiroCookieProperties {
 
     public void setDecryptionCipherKey(String decryptionCipherKey) {
         this.decryptionCipherKey = decryptionCipherKey;
+    }
+
+    public String getDomain() {
+        return domain;
+    }
+
+    public void setDomain(String domain) {
+        this.domain = domain;
+    }
+
+    public String getPath() {
+        return path;
+    }
+
+    public void setPath(String path) {
+        this.path = path;
+    }
+
+    public String getSessionIdName() {
+        return sessionIdName;
+    }
+
+    public void setSessionIdName(String sessionIdName) {
+        this.sessionIdName = sessionIdName;
     }
 }

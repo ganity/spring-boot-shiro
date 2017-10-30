@@ -5,7 +5,7 @@
 
     <groupId>com.millinch</groupId>
     <artifactId>spring-boot-shiro</artifactId>
-    <version>1.0.1-SNAPSHOT</version>
+    <version>1.0.6</version>
     <packaging>pom</packaging>
 
     <name>Millinch :: Spring Boot Shiro</name>
