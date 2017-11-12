@@ -142,6 +142,12 @@ public class ShiroAutoConfiguration {
         rememberMeCookie.setVersion(shiroCookieProperties.getVersion());
         rememberMeCookie.setHttpOnly(shiroCookieProperties.isHttpOnly());
         rememberMeCookie.setSecure(shiroCookieProperties.isSecure());
+        if (null != shiroCookieProperties.getPath()) {
+            rememberMeCookie.setPath(shiroCookieProperties.getPath());
+        }
+        if (null != shiroCookieProperties.getDomain()) {
+            rememberMeCookie.setDomain(shiroCookieProperties.getDomain());
+        }
         return rememberMeCookie;
     }
 
